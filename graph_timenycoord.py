@@ -43,6 +43,11 @@ class Scope(object):
         self.x.append(tempo + self.x[-1]) #x값 넣기
         self.line.set_data(self.x,self.y)
 
+        
+        if self.x[-1] >= self.xstart + self.xmax:
+            plt.savefig('savefig_default.png')
+            return True
+        """
         # 화면에 나타낼 x축 범위 업데이트
         if self.x[-1] >= self.xstart + self.xmax :
             #전체 x값중 반을 화면 옆으로 밀기
@@ -50,7 +55,8 @@ class Scope(object):
             self.ax.set_xlim(self.xstart,self.xstart + self.xmax)
 
             self.ax.figure.canvas.draw()
-
+        """
+        
         return (self.line, )
 
 # y축에 표현할 값을 반환해야하고 scope 객체 선언 전 선언해야함.
@@ -71,7 +77,7 @@ def btn_click(event):
     ax.grid(True)
 
     # 객체 생성
-    scope = Scope(ax, insert, xmax=20, xstart=0, ymax=1080, ystart=0)
+    scope = Scope(ax, insert, xmax=100, xstart=0, ymax=1080, ystart=0)
 
     # update 매소드 호출
     ani = animation.FuncAnimation(fig, scope.update, frames=200, interval=10, blit=True)
