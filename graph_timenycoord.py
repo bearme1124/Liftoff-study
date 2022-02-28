@@ -3,7 +3,7 @@ from tkinter import *
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import time
-import numpy as np
+import pandas as pd
 
 # 스코프 클래스 정의
 class Scope(object):
@@ -22,9 +22,13 @@ class Scope(object):
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
 
-        self.x = [0] # x축 정보 
-        self.y = [540] # y축 정보
-        self.value = 0 # 축 값
+        # dataFrame 설정
+        self.df = pd.DataFrame(columns = ['time', 'value'])
+
+        self.x = [0] # x축 초기값 
+        self.y = [540] # y축 초기값
+        self.value = 0
+        self.df = self.df.append({'time' : 0, 'value' : 540}, ignore_index = True)
         self.fn = fn
         self.line, = ax.plot([],[])
 
@@ -42,10 +46,14 @@ class Scope(object):
         self.y.append(self.value) #y값 넣기
         self.x.append(tempo + self.x[-1]) #x값 넣기
         self.line.set_data(self.x,self.y)
-
         
+        # csv 파일 업데이트
+        new_data = {'time' : tempo + self.x[-1], 'value' : self.value}
+        self.df = self.df.append(new_data, ignore_index = True)
+
         if self.x[-1] >= self.xstart + self.xmax:
-            plt.savefig('savefig_default.png')
+            plt.savefig('savefig_default.png') #png 파일 추출
+            self.df.to_csv('savecsv_default.csv')#csv 파일 추출
             return True
         """
         # 화면에 나타낼 x축 범위 업데이트
@@ -78,7 +86,7 @@ def btn_click(event):
 
     # 객체 생성
     scope = Scope(ax, insert, xmax=100, xstart=0, ymax=1080, ystart=0)
-
+    
     # update 매소드 호출
     ani = animation.FuncAnimation(fig, scope.update, frames=200, interval=10, blit=True)
     
