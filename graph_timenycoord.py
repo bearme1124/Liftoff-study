@@ -55,6 +55,7 @@ class Scope(object):
             plt.savefig('savefig_default.png') #png 파일 추출
             self.df.to_csv('savecsv_default.csv')#csv 파일 추출
             return True
+            
         """
         # 화면에 나타낼 x축 범위 업데이트
         if self.x[-1] >= self.xstart + self.xmax :
