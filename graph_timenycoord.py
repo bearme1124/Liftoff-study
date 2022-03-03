@@ -52,8 +52,8 @@ class Scope(object):
         self.df = self.df.append(new_data, ignore_index = True)
 
         if self.x[-1] >= self.xstart + self.xmax:
-            plt.savefig('savefig_default.png') #png 파일 추출
-            self.df.to_csv('savecsv_default.csv')#csv 파일 추출
+            plt.savefig('Liftoff_result/savefig_default.png') #png 파일 추출
+            self.df.to_csv('Liftoff_result/savecsv_default.csv')#csv 파일 추출
             return True
             
         """
