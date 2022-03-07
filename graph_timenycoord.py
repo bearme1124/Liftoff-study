@@ -28,6 +28,7 @@ class Scope(object):
         self.x = [0] # x축 초기값 
         self.y = [540] # y축 초기값
         self.value = 0
+        self.vibration = 0
         self.df = self.df.append({'time' : 0, 'value' : 540}, ignore_index = True)
         self.fn = fn
         self.line, = ax.plot([],[])
@@ -42,13 +43,13 @@ class Scope(object):
         self.ti = time.time() #시간 업데이트
         
         # 값 넣기
-        self.value = self.fn()# y값 함수 불러오기
+        self.vibration, self.value = self.fn()# y값 함수 불러오기
         self.y.append(self.value) #y값 넣기
         self.x.append(tempo + self.x[-1]) #x값 넣기
         self.line.set_data(self.x,self.y)
         
         # csv 파일 업데이트
-        new_data = {'time' : tempo + self.x[-1], 'value' : self.value}
+        new_data = {'time' : tempo + self.x[-1], 'value' : self.value, 'vibration' : self.vibration}
         self.df = self.df.append(new_data, ignore_index = True)
 
         if self.x[-1] >= self.xstart + self.xmax:
@@ -72,7 +73,7 @@ class Scope(object):
 def insert():
     x, y = pyautogui.position()
     value = 1080 - y
-    return value 
+    return x, value 
 
 # Start 버튼 클릭 시 (960, 540)으로 이동 후, 그래프 그리기 시작
 def btn_click(event):
